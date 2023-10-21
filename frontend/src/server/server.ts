@@ -1,7 +1,7 @@
 import http from "http";
 import fs from "fs";
 
-const ROOT = `${process.env.ROOT_DIR}/public`;
+const ROOT = process.env.ROOT_DIR;
 
 export default class HttpServer {
     private address: string;
@@ -42,6 +42,11 @@ export default class HttpServer {
 
         if (req.url?.endsWith(".css")) {
             this.handleCssRequest(req, res);
+            return;
+        }
+
+        if (req.url?.endsWith(".js")) {
+            this.handleJsRequest(req, res);
             return;
         }
 
@@ -97,13 +102,32 @@ export default class HttpServer {
         });
     }
 
+    private handleJsRequest(
+        req: http.IncomingMessage,
+        res: http.ServerResponse
+    ) {
+        const readStream = fs.createReadStream(this.getJs(req.url));
+        readStream.on("error", () => {
+            this.handle404(res);
+        });
+        readStream.on("ready", () => {
+            res.writeHead(200, { "Content-Type": "text/javascript" });
+            readStream.pipe(res);
+        });
+    }
+
     private getHtml(url: string | undefined): string {
         const path = url === undefined || url === "/" ? "index" : url?.slice(1);
-        return `${ROOT}/${path}.html`;
+        return `${ROOT}/public/${path}.html`;
+    }
+
+    private getJs(url: string | undefined): string {
+        const path = url?.slice(1);
+        return `${ROOT}/dist/src/${path}`;
     }
 
     private getPath(url: string | undefined): string {
         const path = url?.slice(1);
-        return `${ROOT}/${path}`;
+        return `${ROOT}/public/${path}`;
     }
 }
