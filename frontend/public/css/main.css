@@ -1,0 +1,42 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500&display=swap");
+
+:root {
+    --bg: #000000;
+    --fg: #ffffff;
+    --black: #151515;
+    --red: #ff8eaf;
+    --green: #a6e25f;
+    --yellow: #f8e578;
+    --blue: #a6e2f0;
+    --magenta: #e85b92;
+    --cyan: #5f868f;
+    --white: #d5f1f2;
+    --bright-black: #696969;
+    --bright-red: #ed4c7a;
+    --bright-green: #a6e179;
+    --bright-yellow: #ffdf6b;
+    --bright-blue: #79d2ff;
+    --bright-magenta: #bb5d79;
+    --bright-cyan: #87a8af;
+    --bright-white: #e2f1f6;
+}
+
+* {
+    font-family: "Fira Mono", monospace;
+    background: var(--bg);
+    color: var(--fg);
+    user-select: none;
+}
+
+.border {
+    border: solid 1px;
+}
+
+button {
+    background-color: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}
