@@ -47,7 +47,7 @@ export default class HttpServer {
             return;
         }
 
-        if (req.url?.endsWith(".js")) {
+        if (req.url?.endsWith(".js") || req.url?.endsWith(".js.map")) {
             this.handleJsRequest(req, res);
             return;
         }
