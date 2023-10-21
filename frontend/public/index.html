@@ -1,11 +1,40 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
     <meta charset="UTF-8" />
     <title>Apskrift</title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <link rel="stylesheet" href="" />
-    <script src=""></script>
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/game.css" />
     <body>
-        <h1>Apskrift. more to come.</h1>
+        <!-- Workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=1404468 -->
+        <script></script>
+        <main id="game">
+            <div class="settings">
+                <div id="gamemode">
+                    <button id="words">words</button>
+                    <button id="time">time</button>
+                </div>
+                <div id="progress">10s</div>
+                <div id="count">
+                    <button>10</button>
+                    <button>30</button>
+                    <button>60</button>
+                    <button>100</button>
+                </div>
+            </div>
+            <div class="words">
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                Voluptates aliquam minus accusamus ut numquam corrupti quas modi
+                molestias tempore, corporis enim, atque est, blanditiis vel
+                tempora! Ratione, quasi harum? Ab et illum expedita voluptatem?
+                Vel vero quaerat aut illum voluptas sint sequi, dolore fuga,
+                adipisci laudantium nostrum, eaque obcaecati eum natus iusto
+                illo quia ducimus! Molestiae expedita iure eos adipisci quidem
+                quaerat necessitatibus culpa consequuntur ratione perferendis
+                totam porro eaque veritatis, sed placeat, ducimus id! Ad dolores
+                optio consectetur necessitatibus?
+            </div>
+            <div class="actions"></div>
+        </main>
     </body>
 </html>

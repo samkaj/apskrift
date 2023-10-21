@@ -1,0 +1,57 @@
+#game {
+    display: block;
+    margin: auto;
+    width: 90%;
+}
+
+#game,
+#game * {
+    border-radius: 5px;
+}
+
+button:hover,
+.active {
+    color: var(--blue);
+}
+
+#game > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.5em;
+}
+
+.words {
+    display: flex;
+    flex-direction: column;
+    height: 4.8em;
+    overflow-y: hidden;
+    font-size: x-large;
+}
+
+.settings {
+    display: flexbox;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.settings,
+.settings * {
+    background: var(--black);
+    border-radius: 0;
+}
+
+#gamemode {
+    border-right: 1px solid var(--bright-black);
+    border-radius: 0;
+    padding-right: 1em;
+}
+
+#count {
+    border-left: 1px solid var(--bright-black);
+    border-radius: 0;
+    padding-left: 1em;
+}
+
+.actions {
+}
