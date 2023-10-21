@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "CommonJS",
+    "target": "ES6",
     "skipLibCheck": true,
     "sourceMap": true,
     "outDir": "./dist",

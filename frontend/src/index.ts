@@ -1,6 +1,4 @@
-import { config } from "dotenv";
-config();
-import HttpServer from "./server/server";
+import HttpServer from "./server/server.js";
 
 const server = new HttpServer();
 server.serve();
