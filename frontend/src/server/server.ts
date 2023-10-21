@@ -15,7 +15,7 @@ export default class HttpServer {
     }
 
     public serve() {
-        this.server.listen(this.port, this.address, () => {});
+        this.server.listen(this.port, this.address);
     }
 
     private requestHandler(
@@ -37,17 +37,15 @@ export default class HttpServer {
     ) {
         if (req.url === "/favicon.ico") {
             this.handleFaviconRequest(res);
-        } else {
-            const readStream = fs.createReadStream(this.getUrl(req.url));
-            readStream.on("error", () => {
-                res.writeHead(404, { "Content-Type": "text/html" });
-                this.handle404(res);
-            });
-            readStream.on("ready", () => {
-                res.writeHead(200, { "Content-Type": "text/html" });
-                readStream.pipe(res);
-            });
+            return;
         }
+
+        if (req.url?.endsWith(".css")) {
+            this.handleCssRequest(req, res);
+            return;
+        }
+
+        this.handleHtmlRequest(req, res);
     }
 
     private handleBadRequest(res: http.ServerResponse) {
@@ -56,14 +54,13 @@ export default class HttpServer {
     }
 
     private handle404(res: http.ServerResponse) {
-        fs.createReadStream(this.getUrl("/404")).pipe(res);
+        res.writeHead(404, { "Content-Type": "text/html" });
+        fs.createReadStream(this.getHtml("/404")).pipe(res);
     }
 
     private handleFaviconRequest(res: http.ServerResponse) {
-        const faviconPath = `${ROOT}/favicon.ico`;
-        const readStream = fs.createReadStream(faviconPath);
+        const readStream = fs.createReadStream(this.getPath("/favicon.ico"));
         readStream.on("error", () => {
-            res.writeHead(404, { "Content-Type": "text/html" });
             this.handle404(res);
         });
         readStream.on("end", () => {
@@ -72,8 +69,41 @@ export default class HttpServer {
         });
     }
 
-    private getUrl(url: string | undefined): string {
+    private handleHtmlRequest(
+        req: http.IncomingMessage,
+        res: http.ServerResponse
+    ) {
+        const readStream = fs.createReadStream(this.getHtml(req.url));
+        readStream.on("error", () => {
+            this.handle404(res);
+        });
+        readStream.on("ready", () => {
+            res.writeHead(200, { "Content-Type": "text/html" });
+            readStream.pipe(res);
+        });
+    }
+
+    private handleCssRequest(
+        req: http.IncomingMessage,
+        res: http.ServerResponse
+    ) {
+        const readStream = fs.createReadStream(this.getPath(req.url));
+        readStream.on("error", () => {
+            this.handle404(res);
+        });
+        readStream.on("ready", () => {
+            res.writeHead(200, { "Content-Type": "text/css" });
+            readStream.pipe(res);
+        });
+    }
+
+    private getHtml(url: string | undefined): string {
         const path = url === undefined || url === "/" ? "index" : url?.slice(1);
         return `${ROOT}/${path}.html`;
+    }
+
+    private getPath(url: string | undefined): string {
+        const path = url?.slice(1);
+        return `${ROOT}/${path}`;
     }
 }
