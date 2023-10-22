@@ -9,11 +9,6 @@
     border-radius: 5px;
 }
 
-button:hover,
-.active {
-    color: var(--blue);
-}
-
 #game > div {
     display: flex;
     justify-content: space-between;
@@ -21,10 +16,11 @@ button:hover,
     margin: 0.5em;
 }
 
-.words {
+#words {
     display: flex;
     flex-direction: column;
-    height: 4.8em;
+    height: 6em;
+    line-height: 1.2em;
     overflow-y: hidden;
     font-size: x-large;
 }
@@ -33,12 +29,15 @@ button:hover,
     display: flexbox;
     justify-content: space-between;
     padding: 10px;
+    font-size: small;
+    background: var(--faint-black);
+    border-radius: 0;
 }
 
-.settings,
 .settings * {
-    background: var(--black);
-    border-radius: 0;
+    background: transparent;
+    color: var(--bright-white);
+    font-weight: 500;
 }
 
 #gamemode {

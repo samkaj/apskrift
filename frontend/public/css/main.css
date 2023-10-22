@@ -19,6 +19,15 @@
     --bright-magenta: #bb5d79;
     --bright-cyan: #87a8af;
     --bright-white: #e2f1f6;
+
+    --faint-black: #1515155e;
+    --faint-red: #ff8eb05e;
+    --faint-green: #a6e25f5e;
+    --faint-yellow: #f8e5785e;
+    --faint-blue: #a6e2f05e;
+    --faint-magenta: #e85b925e;
+    --faint-cyan: #5f868f5e;
+    --faint-white: #d5f1f25e;
 }
 
 * {
@@ -33,10 +42,18 @@
 }
 
 button {
-    background-color: none;
+    background-color: transparent;
     border: none;
-    padding: 0;
+    padding: 0.3em;
     font: inherit;
     cursor: pointer;
     outline: inherit;
+    border-radius: 10px;
+    transition: background-color 0.1s;
+}
+
+button:hover,
+.active {
+    background-color: var(--faint-blue);
+    color: var(--blue);
 }
