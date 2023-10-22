@@ -19,11 +19,11 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    height: 6em;
+    max-height: 6em;
     line-height: 1.2em;
     overflow-y: hidden;
-    font-size: x-large;
-    column-gap: 1em;
+    font-size: xx-large;
+    column-gap: 0.5em;
     justify-content: flex-start;
 }
 
@@ -55,10 +55,13 @@
 }
 
 #word-input {
+    margin: auto;
     display: block;
-    font-size: x-large;
-    padding: 0.5em;
+    font-size: larger;
+    padding: 0.5em 1em;
     border: none;
+    /* Fill width */
+    width: calc(99% - 2em);
     background: var(--faint-black);
     color: var(--bright-white);
     outline: none;
@@ -71,12 +74,10 @@
 }
 
 .correct {
-    background: var(--faint-green);
     color: var(--green);
 }
 
 .incorrect {
-    background: var(--faint-red);
     color: var(--red);
 }
 

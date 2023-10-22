@@ -1,31 +1,31 @@
 @import url("https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500&display=swap");
 
 :root {
-    --bg: #161616;
+    --bg: #060508;
     --fg: #ffffff;
-    --black: #222222;
-    --red: #e84f4f;
-    --green: #b7ce42;
-    --yellow: #fea63c;
-    --blue: #66aabb;
-    --magenta: #b7416e;
-    --cyan: #6d878d;
+    --black: #121115;
+    --red: #ff9f95;
+    --green: #e2ffc7;
+    --yellow: #ffffb9;
+    --blue: #a8ceea;
+    --magenta: #e2b5cc;
+    --cyan: #c2efff;
     --white: #dddddd;
-    --bright-black: #666666;
-    --bright-red: #d23d3d;
-    --bright-green: #bde077;
-    --bright-yellow: #ffe863;
-    --bright-blue: #aaccbb;
-    --bright-magenta: #e16a98;
-    --bright-cyan: #42717b;
-    --bright-white: #cccccc;
-    --faint-black: #2222225e;
-    --faint-red: #e84f4f5e;
-    --faint-green: #b7ce425e;
-    --faint-yellow: #fea63c5e;
-    --faint-blue: #66aabb5e;
-    --faint-magenta: #b7416e5e;
-    --faint-cyan: #6d878d5e;
+    --bright-black: #1a181f;
+    --bright-red: #ff8d80;
+    --bright-green: #dbffb3;
+    --bright-yellow: #ffbe64;
+    --bright-blue: #7eb6ff;
+    --bright-magenta: #e296ff;
+    --bright-cyan: #9ce9ff;
+    --bright-white: #dddddd;
+    --faint-black: #1211155e;
+    --faint-red: #ff9f955e;
+    --faint-green: #e2ffc75e;
+    --faint-yellow: #ffffb95e;
+    --faint-blue: #a8ceea5e;
+    --faint-magenta: #e2b5cc5e;
+    --faint-cyan: #c2efff5e;
     --faint-white: #dddddd5e;
 }
 
