@@ -1,7 +1,7 @@
 #game {
-    display: block;
+    display: grid;
     margin: auto;
-    width: 90%;
+    width: 60vw;
 }
 
 #game,
@@ -11,18 +11,20 @@
 
 #game > div {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     margin: 0.5em;
 }
 
 #words {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     height: 6em;
     line-height: 1.2em;
     overflow-y: hidden;
     font-size: x-large;
+    column-gap: 1em;
+    justify-content: flex-start;
 }
 
 .settings {
@@ -50,6 +52,36 @@
     border-left: 1px solid var(--bright-black);
     border-radius: 0;
     padding-left: 1em;
+}
+
+#word-input {
+    display: block;
+    font-size: x-large;
+    padding: 0.5em;
+    border: none;
+    background: var(--faint-black);
+    color: var(--bright-white);
+    outline: none;
+}
+
+#word-input input {
+    font-size: large;
+    color: var(--bright-white);
+    width: 100%;
+}
+
+.correct {
+    background: var(--faint-green);
+    color: var(--green);
+}
+
+.incorrect {
+    background: var(--faint-red);
+    color: var(--red);
+}
+
+.inactive {
+    color: var(--bright-white);
 }
 
 .actions {
