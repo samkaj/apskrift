@@ -1,33 +1,32 @@
 @import url("https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500&display=swap");
 
 :root {
-    --bg: #000000;
+    --bg: #161616;
     --fg: #ffffff;
-    --black: #151515;
-    --red: #ff8eaf;
-    --green: #a6e25f;
-    --yellow: #f8e578;
-    --blue: #a6e2f0;
-    --magenta: #e85b92;
-    --cyan: #5f868f;
-    --white: #d5f1f2;
-    --bright-black: #696969;
-    --bright-red: #ed4c7a;
-    --bright-green: #a6e179;
-    --bright-yellow: #ffdf6b;
-    --bright-blue: #79d2ff;
-    --bright-magenta: #bb5d79;
-    --bright-cyan: #87a8af;
-    --bright-white: #e2f1f6;
-
-    --faint-black: #1515155e;
-    --faint-red: #ff8eb05e;
-    --faint-green: #a6e25f5e;
-    --faint-yellow: #f8e5785e;
-    --faint-blue: #a6e2f05e;
-    --faint-magenta: #e85b925e;
-    --faint-cyan: #5f868f5e;
-    --faint-white: #d5f1f25e;
+    --black: #222222;
+    --red: #e84f4f;
+    --green: #b7ce42;
+    --yellow: #fea63c;
+    --blue: #66aabb;
+    --magenta: #b7416e;
+    --cyan: #6d878d;
+    --white: #dddddd;
+    --bright-black: #666666;
+    --bright-red: #d23d3d;
+    --bright-green: #bde077;
+    --bright-yellow: #ffe863;
+    --bright-blue: #aaccbb;
+    --bright-magenta: #e16a98;
+    --bright-cyan: #42717b;
+    --bright-white: #cccccc;
+    --faint-black: #2222225e;
+    --faint-red: #e84f4f5e;
+    --faint-green: #b7ce425e;
+    --faint-yellow: #fea63c5e;
+    --faint-blue: #66aabb5e;
+    --faint-magenta: #b7416e5e;
+    --faint-cyan: #6d878d5e;
+    --faint-white: #dddddd5e;
 }
 
 * {
@@ -56,4 +55,26 @@ button:hover,
 .active {
     background-color: var(--faint-blue);
     color: var(--blue);
+}
+
+input {
+    font: inherit;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: inherit;
+}
+
+::selection {
+    background: var(--faint-blue);
+    color: var(--blue);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
 }
