@@ -1,7 +1,7 @@
 #game {
     display: flex;
     margin: auto;
-    width: 60vw;
+    width: 800px;
     height: calc(100vh - 2em);
     min-width: 800px;
     flex-wrap: wrap;
