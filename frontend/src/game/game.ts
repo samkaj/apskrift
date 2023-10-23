@@ -1,3 +1,5 @@
+import generateWords from "./wordgen.js";
+
 /**
  * Game describes different ways of checking if a game is over.
  */
@@ -6,6 +8,7 @@ interface Gamemode {
     startGame(): void;
     onInput(): void;
     reset(): void;
+    getProgressHtml(): string;
 }
 
 enum WordStatus {
@@ -22,24 +25,25 @@ type Word = {
 
 export default class Game {
     private gamemode: Gamemode;
-    private words: Word[] = this.getWords();
+    private words: Word[];
     private index: number = 0;
+    private amount: number;
 
-    constructor(gamemode: Gamemode) {
+    constructor(gamemode: Gamemode, amount: number = 60) {
         this.gamemode = gamemode;
+        this.words = this.getWords(amount);
         this.words[0].wordStatus = WordStatus.ACTIVE;
+        this.amount = amount;
     }
 
-    getWords(): Word[] {
-        return "The quick brown fox jumps over the lazy dog"
-            .split(" ")
-            .map((value) => {
-                return { value: value, wordStatus: WordStatus.INACTIVE };
-            });
+    getWords(amount: number): Word[] {
+        return generateWords(amount).map((value) => {
+            return { value: value, wordStatus: WordStatus.INACTIVE };
+        });
     }
 
     reset(): void {
-        this.words = this.getWords();
+        this.words = this.getWords(this.amount);
         this.words[0].wordStatus = WordStatus.ACTIVE;
         this.index = 0;
         this.gamemode.reset();
@@ -56,11 +60,11 @@ export default class Game {
     validateWord(word: string): void {
         if (this.isGameOver()) return;
         this.gamemode.onInput();
-        if (this.words[this.index].value === word) {
-            this.words[this.index].wordStatus = WordStatus.CORRECT;
-        } else {
-            this.words[this.index].wordStatus = WordStatus.INCORRECT;
-        }
+        const currentWord = this.words[this.index];
+        this.words[this.index].wordStatus =
+            currentWord.value === word
+                ? WordStatus.CORRECT
+                : WordStatus.INCORRECT;
         this.index++;
         if (this.index < this.words.length)
             this.words[this.index].wordStatus = WordStatus.ACTIVE;
@@ -77,6 +81,10 @@ export default class Game {
             case WordStatus.INCORRECT:
                 return "incorrect";
         }
+    }
+
+    getProgressHtml(): string {
+        return this.gamemode.getProgressHtml();
     }
 
     getHtml(): string {
@@ -114,6 +122,10 @@ export class TimeLimitGame implements Gamemode {
     reset(): void {
         this.timer.stopTimer();
     }
+
+    getProgressHtml(): string {
+        return `${this.timer.getTime()} / ${this.timeLimit}`;
+    }
 }
 
 export class WordLimitGame implements Gamemode {
@@ -138,6 +150,10 @@ export class WordLimitGame implements Gamemode {
 
     reset(): void {
         this.wordsTyped = 0;
+    }
+
+    getProgressHtml(): string {
+        return `${this.wordsTyped} / ${this.wordLimit}`;
     }
 }
 

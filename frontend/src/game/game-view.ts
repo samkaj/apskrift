@@ -4,14 +4,15 @@ import Game, { WordLimitGame } from "./game.js";
 const input: any = document.getElementById("word-input");
 const up = document.getElementById("scroll-up");
 const down = document.getElementById("scroll-down");
-const game = new Game(new WordLimitGame(90));
-const gameBox = document.getElementById("words");
+const game = new Game(new WordLimitGame(15), 15);
+const wordsElement = document.getElementById("words");
+const progressElement = document.getElementById("progress");
 const scroll = new Scroller("words");
 
 let activeY: number =
     document.querySelector(".active")?.getBoundingClientRect().y || 0;
 
-if (gameBox) gameBox.innerHTML = game.getHtml();
+if (wordsElement) wordsElement.innerHTML = game.getHtml();
 
 function handleInput(e: any) {
     const val = e.target.value;
@@ -19,7 +20,8 @@ function handleInput(e: any) {
         game.validateWord(val.trim());
         e.target.value = "";
         input.value = "";
-        if (gameBox) gameBox.innerHTML = game.getHtml();
+        if (wordsElement) wordsElement.innerHTML = game.getHtml();
+        if (progressElement) progressElement.innerHTML = game.getProgressHtml();
         if (game.isGameOver()) {
             alert("Game over!");
         }
@@ -40,9 +42,10 @@ function scrollIfNewLine() {
 function handleReset(e: any) {
     if (e.key === "Escape") {
         game.reset();
-        if (gameBox) gameBox.innerHTML = game.getHtml();
-        input.value = "";
-        input.focus();
+        if (wordsElement) wordsElement.innerHTML = game.getHtml();
+        resetInput();
+        scroll.top();
+        if (progressElement) progressElement.innerHTML = game.getProgressHtml();
     }
 }
 
@@ -53,4 +56,11 @@ function addEventListeners() {
     input?.addEventListener("input", handleInput);
 }
 
+function resetInput() {
+    input.value = "";
+    input.focus();
+}
+
 addEventListeners();
+scroll.top();
+resetInput();
