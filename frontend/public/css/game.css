@@ -1,7 +1,12 @@
 #game {
-    display: grid;
+    display: flex;
     margin: auto;
     width: 60vw;
+    height: calc(100vh - 2em);
+    min-width: 800px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 }
 
 #game,
@@ -11,7 +16,6 @@
 
 #game > div {
     display: flex;
-    align-items: center;
     margin: 0.5em;
 }
 
@@ -24,7 +28,6 @@
     overflow-y: hidden;
     font-size: xx-large;
     column-gap: 0.5em;
-    justify-content: flex-start;
 }
 
 .settings {
@@ -32,14 +35,21 @@
     justify-content: space-between;
     padding: 10px;
     font-size: small;
-    background: var(--faint-black);
     border-radius: 0;
+    background-color: var(--black);
+    border: solid 1px var(--bright-black);
+    width: 100%;
+    align-self: flex-start;
 }
 
 .settings * {
     background: transparent;
-    color: var(--bright-white);
     font-weight: 500;
+}
+
+.settings > #progress {
+    align-self: center;
+    font-size: medium;
 }
 
 #gamemode {
@@ -54,22 +64,22 @@
     padding-left: 1em;
 }
 
+.wrap {
+    flex-wrap: wrap;
+    gap: 1em;
+}
+
 #word-input {
     margin: auto;
-    display: block;
     font-size: larger;
     padding: 0.5em 1em;
     border: none;
-    /* Fill width */
     width: calc(99% - 2em);
-    background: var(--faint-black);
-    color: var(--bright-white);
     outline: none;
 }
 
 #word-input input {
     font-size: large;
-    color: var(--bright-white);
     width: 100%;
 }
 
@@ -86,4 +96,5 @@
 }
 
 .actions {
+    align-self: flex-end;
 }

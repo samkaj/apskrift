@@ -1,9 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500&display=swap");
 
 :root {
-    --bg: #060508;
-    --fg: #ffffff;
-    --black: #121115;
+    --bg: #111114;
+    --fg: #e5e9f5;
+    --black: #15151a;
     --red: #ff9f95;
     --green: #e2ffc7;
     --yellow: #ffffb9;
@@ -11,7 +11,7 @@
     --magenta: #e2b5cc;
     --cyan: #c2efff;
     --white: #dddddd;
-    --bright-black: #1a181f;
+    --bright-black: #1e1e25;
     --bright-red: #ff8d80;
     --bright-green: #dbffb3;
     --bright-yellow: #ffbe64;
@@ -70,11 +70,6 @@ input {
     color: var(--blue);
 }
 
-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
+.shadow {
+    box-shadow: 0 0 1px 0 var(--bright-black);
 }

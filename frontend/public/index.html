@@ -17,7 +17,7 @@
                         <button id="words-btn">words</button>
                         <button id="time-btn">time</button>
                     </div>
-                    <div id="progress">10s</div>
+                    <div id="progress"></div>
                     <div id="count">
                         <button>10</button>
                         <button>30</button>
@@ -25,17 +25,19 @@
                         <button>100</button>
                     </div>
                 </div>
-                <div id="words"></div>
-                <input
-                    onfocus="this.value=''"
-                    type="text"
-                    id="word-input"
-                    name="typing practice input"
-                />
-                <div class="actions">
+                <div class="wrap">
+                    <div id="words"></div>
+                    <input
+                        onfocus="this.value=''"
+                        type="text"
+                        id="word-input"
+                        name="typing practice input"
+                    />
+                </div>
+                <footer class="actions">
                     <button id="scroll-up">UP</button>
                     <button id="scroll-down">DOWN</button>
-                </div>
+                </footer>
             </main>
         </div>
     </body>
