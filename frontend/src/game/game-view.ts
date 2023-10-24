@@ -16,7 +16,8 @@ if (wordsElement) wordsElement.innerHTML = game.getHtml();
 
 function handleInput(e: any) {
     const val = e.target.value;
-    if (val.endsWith(" ")) {
+    const correct = val == game.getCurrentWord().value;
+    if (val.endsWith(" ") || correct && game.isLastWord()) {
         game.validateWord(val.trim());
         e.target.value = "";
         input.value = "";

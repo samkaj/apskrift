@@ -70,6 +70,14 @@ export default class Game {
             this.words[this.index].wordStatus = WordStatus.ACTIVE;
     }
 
+    getCurrentWord(): Word {
+        return this.words[this.index];
+    }
+
+    isLastWord(): boolean {
+        return this.index === this.words.length - 1;
+    }
+
     getWordClass(word: Word): string {
         switch (word.wordStatus) {
             case WordStatus.ACTIVE:
