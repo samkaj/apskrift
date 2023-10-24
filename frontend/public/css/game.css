@@ -74,8 +74,10 @@
     font-size: larger;
     padding: 0.5em 1em;
     border: none;
-    width: calc(99% - 2em);
+    width: 100%;
     outline: none;
+    background-color: var(--black);
+    border: solid 1px var(--bright-black);
 }
 
 #word-input input {
@@ -83,18 +85,27 @@
     width: 100%;
 }
 
-.correct {
+.word-active {
+    background-color: var(--faint-blue);
+    color: var(--blue);
+}
+
+.word-correct {
     color: var(--green);
 }
 
-.incorrect {
+.word-incorrect {
     color: var(--red);
 }
 
-.inactive {
+.word-inactive {
     color: var(--bright-white);
 }
 
 .actions {
     align-self: flex-end;
+}
+
+.hidden {
+    display: none;
 }

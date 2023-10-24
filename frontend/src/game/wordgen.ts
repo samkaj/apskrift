@@ -1,5 +1,4 @@
 const generateWords = (amount: number): string[] => {
-    console.log("generating words");
     const words: string[] = [];
     for (let i = 0; i < amount; i++) {
         words.push(getRandomWord());
