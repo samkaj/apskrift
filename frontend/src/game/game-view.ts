@@ -50,12 +50,16 @@ function scrollIfNewLine() {
 
 function handleReset(e: any) {
     if (e.key === "Escape") {
-        game.reset();
-        if (wordsElement) wordsElement.innerHTML = game.getHtml();
-        resetInput();
-        scroll.top();
-        if (progressElement) progressElement.innerHTML = game.getProgressHtml();
+        reset();
     }
+}
+
+function reset() {
+    game.reset();
+    resetInput();
+    scroll.top();
+    activeY = 0;
+    updateUI();
 }
 
 function addEventListeners() {
@@ -63,6 +67,96 @@ function addEventListeners() {
     up?.addEventListener("click", scroll.up.bind(scroll));
     down?.addEventListener("click", scroll.down.bind(scroll));
     input?.addEventListener("input", handleInput);
+    wordsButton?.addEventListener("click", updateWordHtml);
+    timeButton?.addEventListener("click", updateTimeHtml);
+    addWordLimitEventListeners();
+    addTimeLimitEventListeners();
+}
+
+function addWordLimitEventListeners() {
+    const wordAmounts = document.querySelectorAll(".word-amount");
+    wordAmounts.forEach((amount) => {
+        amount.addEventListener("click", handleWordLimitClick);
+    });
+}
+
+function addTimeLimitEventListeners() {
+    const timeAmounts = document.querySelectorAll(".time-amount");
+    timeAmounts.forEach((amount) => {
+        amount.addEventListener("click", handleTimeLimitClick);
+    });
+}
+
+function handleWordLimitClick(e: any) {
+    const wordLimit = parseInt(e.target.id.split("-")[1]);
+    settings.setWordLimit(wordLimit);
+    game = new Game(new WordLimitGame(wordLimit), wordLimit);
+    resetInput();
+    scroll.top();
+    updateWordHtml();
+}
+
+function handleTimeLimitClick(e: any) {
+    const timeLimit = parseInt(e.target.id.split("-")[1]);
+    settings.setTimeLimit(timeLimit);
+    game = new Game(new TimeLimitGame(timeLimit), 100);
+    resetInput();
+    scroll.top();
+    updateTimeHtml();
+}
+
+function updateTimeHtml() {
+    settings.setGamemode("time");
+    clearAmountLists();
+    timeButton?.classList.add("active");
+    wordsButton?.classList.remove("active");
+    wordLimitDiv?.classList.add("hidden");
+    timeLimitDiv?.classList.remove("hidden");
+    const timeLimit = settings.getTimeLimit();
+    const activeTimeLimit = document.getElementById(`time-${timeLimit}`);
+    activeTimeLimit?.classList.add("active");
+    settings.setTimeLimit(timeLimit);
+    game = new Game(new TimeLimitGame(timeLimit), 100);
+}
+
+function updateWordHtml() {
+    settings.setGamemode("word");
+    clearAmountLists();
+    wordsButton?.classList.add("active");
+    timeButton?.classList.remove("active");
+    timeLimitDiv?.classList.add("hidden");
+    wordLimitDiv?.classList.remove("hidden");
+    const wordLimit = settings.getWordLimit();
+    const activeWordLimit = document.getElementById(`word-${wordLimit}`);
+    activeWordLimit?.classList.add("active");
+    settings.setWordLimit(wordLimit);
+    game = new Game(new WordLimitGame(wordLimit), wordLimit);
+}
+
+function clearAmountLists() {
+    const wordAmounts = document.querySelectorAll(".word-amount");
+    const timeAmounts = document.querySelectorAll(".time-amount");
+    wordAmounts.forEach((amount) => {
+        amount.classList.remove("active");
+    });
+    timeAmounts.forEach((amount) => {
+        amount.classList.remove("active");
+    });
+}
+
+function loadSettings() {
+    const gamemode = settings.getGamemode();
+    if (gamemode === "word") {
+        updateWordHtml();
+    } else {
+        updateTimeHtml();
+    }
+    updateUI();
+}
+
+function updateUI() {
+    if (wordsElement) wordsElement.innerHTML = game.getHtml();
+    if (progressElement) progressElement.innerHTML = game.getProgressHtml();
 }
 
 function resetInput() {
@@ -73,3 +167,13 @@ function resetInput() {
 addEventListeners();
 scroll.top();
 resetInput();
+loadSettings();
+updateUI();
+
+setInterval(() => {
+    if (game.isGameOver()) {
+        alert("Game over!");
+        reset();
+    }
+    updateUI();
+}, 50);
