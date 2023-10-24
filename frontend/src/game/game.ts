@@ -81,13 +81,13 @@ export default class Game {
     getWordClass(word: Word): string {
         switch (word.wordStatus) {
             case WordStatus.ACTIVE:
-                return "active";
+                return "word-active";
             case WordStatus.INACTIVE:
-                return "inactive";
+                return "word-inactive";
             case WordStatus.CORRECT:
-                return "correct";
+                return "word-correct";
             case WordStatus.INCORRECT:
-                return "incorrect";
+                return "word-incorrect";
         }
     }
 

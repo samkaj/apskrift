@@ -14,15 +14,23 @@
             <main id="game">
                 <div class="settings">
                     <div id="gamemode">
-                        <button id="words-btn">words</button>
+                        <button id="words-btn" class="active">words</button>
                         <button id="time-btn">time</button>
                     </div>
                     <div id="progress"></div>
                     <div id="count">
-                        <button>10</button>
-                        <button>30</button>
-                        <button>60</button>
-                        <button>100</button>
+                        <div id="word-limit">
+                            <button class="word-amount" id="word-10">10</button>
+                            <button class="word-amount" id="word-25">25</button>
+                            <button class="word-amount" id="word-50">50</button>
+                            <button class="word-amount" id="word-100">100</button>
+                        </div>
+                        <div id="time-limit">
+                            <button class="time-amount" id="time-15">15</button>
+                            <button class="time-amount" id="time-30">30</button>
+                            <button class="time-amount" id="time-60">60</button>
+                            <button class="time-amount" id="time-120">120</button>
+                        </div>
                     </div>
                 </div>
                 <div class="wrap">

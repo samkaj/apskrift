@@ -1,38 +1,46 @@
 import Scroller from "./scroller.js";
-import Game, { WordLimitGame } from "./game.js";
+import Game, { TimeLimitGame, WordLimitGame } from "./game.js";
+import Settings from "./settings.js";
 
 const input: any = document.getElementById("word-input");
 const up = document.getElementById("scroll-up");
 const down = document.getElementById("scroll-down");
-const game = new Game(new WordLimitGame(15), 15);
 const wordsElement = document.getElementById("words");
 const progressElement = document.getElementById("progress");
 const scroll = new Scroller("words");
+const wordsButton = document.getElementById("words-btn");
+const wordLimitDiv = document.getElementById("word-limit");
+const timeButton = document.getElementById("time-btn");
+const timeLimitDiv = document.getElementById("time-limit");
+const settings = new Settings();
+
+let game = new Game(new WordLimitGame(15), 15);
 
 let activeY: number =
-    document.querySelector(".active")?.getBoundingClientRect().y || 0;
+    document.querySelector(".word-active")?.getBoundingClientRect().y || 0;
 
 if (wordsElement) wordsElement.innerHTML = game.getHtml();
 
 function handleInput(e: any) {
+    if (!game.isRunning()) {
+        game.startGame();
+    }
     const val = e.target.value;
     const correct = val == game.getCurrentWord().value;
-    if (val.endsWith(" ") || correct && game.isLastWord()) {
+    if (val.endsWith(" ") || (correct && game.isLastWord())) {
         game.validateWord(val.trim());
         e.target.value = "";
         input.value = "";
-        if (wordsElement) wordsElement.innerHTML = game.getHtml();
-        if (progressElement) progressElement.innerHTML = game.getProgressHtml();
         if (game.isGameOver()) {
             alert("Game over!");
         }
-        scrollIfNewLine();
     }
+    scrollIfNewLine();
 }
 
 function scrollIfNewLine() {
     const newActiveY =
-        document.querySelector(".active")?.getBoundingClientRect().y || 0;
+        document.querySelector(".word-active")?.getBoundingClientRect().y || 0;
     if (activeY === 0) activeY = newActiveY;
     if (newActiveY > activeY) {
         scroll.down();
