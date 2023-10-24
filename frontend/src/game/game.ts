@@ -18,12 +18,19 @@ enum WordStatus {
     INCORRECT,
 }
 
+enum RunningStatus {
+    RUNNING,
+    STOPPED,
+    FINISHED,
+}
+
 type Word = {
     value: string;
     wordStatus: WordStatus;
 };
 
 export default class Game {
+    running: RunningStatus = RunningStatus.STOPPED;
     private gamemode: Gamemode;
     private words: Word[];
     private index: number = 0;
@@ -31,29 +38,41 @@ export default class Game {
 
     constructor(gamemode: Gamemode, amount: number = 60) {
         this.gamemode = gamemode;
-        this.words = this.getWords(amount);
+        this.words = this.createWords(amount);
         this.words[0].wordStatus = WordStatus.ACTIVE;
         this.amount = amount;
     }
 
-    getWords(amount: number): Word[] {
+    createWords(amount: number): Word[] {
         return generateWords(amount).map((value) => {
             return { value: value, wordStatus: WordStatus.INACTIVE };
         });
     }
 
     reset(): void {
-        this.words = this.getWords(this.amount);
+        this.words = this.createWords(this.amount);
         this.words[0].wordStatus = WordStatus.ACTIVE;
         this.index = 0;
+        this.running = RunningStatus.STOPPED;
         this.gamemode.reset();
     }
 
     isGameOver(): boolean {
-        return this.gamemode.isGameOver();
+        const gameOver =
+            this.gamemode.isGameOver() &&
+            this.running === RunningStatus.RUNNING;
+        if (gameOver) {
+            this.running = RunningStatus.FINISHED;
+        }
+        return gameOver;
+    }
+
+    isRunning(): boolean {
+        return this.running === RunningStatus.RUNNING;
     }
 
     startGame(): void {
+        this.running = RunningStatus.RUNNING;
         this.gamemode.startGame();
     }
 
