@@ -18,7 +18,6 @@ export default class GameView {
     constructor() {
         this.game = new Game(new WordLimitGame(100), 100);
         this.initElements();
-        this.initListeners();
         this.activeY = 0;
         this.settings = new Settings();
         this.loadSettings();
@@ -63,86 +62,74 @@ export default class GameView {
     }
 
     private addEventListeners() {
-        this.input.addEventListener("input", this.handleInput);
-        document.addEventListener("keydown", this.handleReset);
+        this.input.addEventListener("input", this.handleInput.bind(this));
+        document.addEventListener("keydown", this.handleReset.bind(this));
         this.chooseWordsButton?.addEventListener(
             "click",
-            this.updateWordHtml.bind(this)
+            this.switchToWordLimit.bind(this)
         );
         this.chooseTimeButton?.addEventListener(
             "click",
-            this.updateTimeHtml.bind(this)
+            this.switchToTimeLimit.bind(this)
         );
-        this.addWordLimitEventListeners();
-        this.addTimeLimitEventListeners();
+        this.initAmountButtons();
     }
 
-    private addWordLimitEventListeners() {
-        const wordAmounts = document.querySelectorAll(".word-amount");
-        wordAmounts.forEach((amount) => {
-            amount.addEventListener(
-                "click",
-                this.handleWordLimitClick.bind(this)
-            );
-        });
-    }
-
-    private addTimeLimitEventListeners() {
-        const timeAmounts = document.querySelectorAll(".time-amount");
-        timeAmounts.forEach((amount) => {
-            amount.addEventListener(
-                "click",
-                this.handleTimeLimitClick.bind(this)
-            );
-        });
-    }
-
-    private handleWordLimitClick(e: any) {
-        const wordLimit = parseInt(e.target.id.split("-")[1]);
-        this.settings.setWordLimit(wordLimit);
-        this.game = new Game(new WordLimitGame(wordLimit), wordLimit);
-        this.resetInput();
-        this.scroll.top();
-        this.updateWordHtml();
-    }
-
-    private handleReset(e: any) {
+    private handleReset(e: KeyboardEvent) {
         if (e.key === "Escape") {
             this.reset();
         }
     }
 
-    private handleTimeLimitClick(e: any) {
-        const timeLimit = parseInt(e.target.id.split("-")[1]);
-        this.settings.setTimeLimit(timeLimit);
-        this.game = new Game(new TimeLimitGame(timeLimit), 100);
-        this.resetInput();
-        this.scroll.top();
+    private switchToTimeLimit() {
+        this.settings.setGamemode("time");
         this.updateTimeHtml();
+        this.reset();
     }
 
-    private initListeners() {
-        this.input.addEventListener("input", this.handleInput);
-        document.addEventListener("keydown", this.handleReset);
-        this.chooseWordsButton?.addEventListener(
-            "click",
-            this.handleWordLimitClick
-        );
-        this.chooseTimeButton?.addEventListener(
-            "click",
-            this.handleTimeLimitClick
-        );
+    private switchToWordLimit() {
+        this.settings.setGamemode("word");
+        this.updateWordHtml();
+        this.reset();
     }
 
-    private handleInput = (e: any) => {
+    private initAmountButtons() {
+        const wordAmounts = document.querySelectorAll(".word-amount");
+        const timeAmounts = document.querySelectorAll(".time-amount");
+        wordAmounts.forEach((amount) => {
+            amount.addEventListener("click", this.handleWordAmount.bind(this));
+        });
+        timeAmounts.forEach((amount) => {
+            amount.addEventListener("click", this.handleTimeAmount.bind(this));
+        });
+    }
+
+    private handleWordAmount(e: Event): void {
+        const target = e.target as HTMLElement;
+        const wordLimit = target.id.split("-")[1];
+        this.settings.setWordLimit(parseInt(wordLimit));
+        this.updateWordHtml();
+        this.reset();
+    }
+
+    private handleTimeAmount(e: Event): void {
+        const target = e.target as HTMLElement;
+        const timeLimit = target.id.split("-")[1];
+        this.settings.setTimeLimit(parseInt(timeLimit));
+        this.updateTimeHtml();
+        this.reset();
+    }
+
+    private handleInput(e: Event): void {
+        const target = e.target as HTMLInputElement;
         if (!this.game.isRunning()) {
             this.game.startGame();
         }
-        const val = e.target.value;
+        const val = target.value;
         const correct = val == this.game.getCurrentWord().value;
         if (val.endsWith(" ") || (correct && this.game.isLastWord())) {
             this.game.validateWord(val.trim());
-            e.target.value = "";
+            target.value = "";
             this.input.value = "";
             if (this.game.isGameOver()) {
                 alert(this.game.getWPM());
@@ -150,8 +137,9 @@ export default class GameView {
         }
 
         this.scrollIfNewLine();
-    };
-    private scrollIfNewLine() {
+    }
+
+    private scrollIfNewLine(): void {
         const newActiveY =
             document.querySelector(".word-active")?.getBoundingClientRect().y ||
             0;
@@ -162,7 +150,7 @@ export default class GameView {
         }
     }
 
-    private updateTimeHtml() {
+    private updateTimeHtml(): void {
         this.settings.setGamemode("time");
         this.clearAmountLists();
         this.chooseTimeButton?.classList.add("active");
@@ -176,7 +164,7 @@ export default class GameView {
         this.game = new Game(new TimeLimitGame(timeLimit), 100);
     }
 
-    private updateWordHtml() {
+    private updateWordHtml(): void {
         this.settings.setGamemode("word");
         this.clearAmountLists();
         this.chooseTimeButton?.classList.remove("active");
@@ -190,7 +178,7 @@ export default class GameView {
         this.game = new Game(new WordLimitGame(wordLimit), wordLimit);
     }
 
-    private clearAmountLists() {
+    private clearAmountLists(): void {
         const wordAmounts = document.querySelectorAll(".word-amount");
         const timeAmounts = document.querySelectorAll(".time-amount");
         wordAmounts.forEach((amount) => {
@@ -201,7 +189,7 @@ export default class GameView {
         });
     }
 
-    private resetInput() {
+    private resetInput(): void {
         this.input.value = "";
         this.input.focus();
     }
