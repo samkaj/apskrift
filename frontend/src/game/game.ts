@@ -35,12 +35,16 @@ export default class Game {
     private words: Word[];
     private index: number = 0;
     private amount: number;
+    private startTime: number;
+    private endTime: number = 0;
+    private correctWords: number = 0;
 
     constructor(gamemode: Gamemode, amount: number = 60) {
         this.gamemode = gamemode;
         this.words = this.createWords(amount);
         this.words[0].wordStatus = WordStatus.ACTIVE;
         this.amount = amount;
+        this.startTime = Date.now();
     }
 
     createWords(amount: number): Word[] {
@@ -54,6 +58,8 @@ export default class Game {
         this.words[0].wordStatus = WordStatus.ACTIVE;
         this.index = 0;
         this.running = RunningStatus.STOPPED;
+        this.endTime = Date.now();
+        this.correctWords = 0;
         this.gamemode.reset();
     }
 
@@ -62,6 +68,7 @@ export default class Game {
             this.gamemode.isGameOver() &&
             this.running === RunningStatus.RUNNING;
         if (gameOver) {
+            this.endTime = Date.now();
             this.running = RunningStatus.FINISHED;
         }
         return gameOver;
@@ -72,6 +79,7 @@ export default class Game {
     }
 
     startGame(): void {
+        this.startTime = Date.now();
         this.running = RunningStatus.RUNNING;
         this.gamemode.startGame();
     }
@@ -84,6 +92,9 @@ export default class Game {
             currentWord.value === word
                 ? WordStatus.CORRECT
                 : WordStatus.INCORRECT;
+        if (currentWord.value === word) {
+            this.correctWords++;
+        }
         this.index++;
         if (this.index < this.words.length)
             this.words[this.index].wordStatus = WordStatus.ACTIVE;
@@ -108,6 +119,12 @@ export default class Game {
             case WordStatus.INCORRECT:
                 return "word-incorrect";
         }
+    }
+
+    getWPM(): number {
+        const time = this.endTime - this.startTime;
+        const minutes = time / 1000 / 60;
+        return Math.round(this.correctWords / minutes);
     }
 
     getProgressHtml(): string {

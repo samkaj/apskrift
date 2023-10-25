@@ -32,7 +32,7 @@ function handleInput(e: any) {
         e.target.value = "";
         input.value = "";
         if (game.isGameOver()) {
-            alert("Game over!");
+            alert(game.getWPM());
         }
     }
     scrollIfNewLine();
@@ -172,7 +172,7 @@ updateUI();
 
 setInterval(() => {
     if (game.isGameOver()) {
-        alert("Game over!");
+        alert(game.getWPM());
         reset();
     }
     updateUI();
