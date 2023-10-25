@@ -102,10 +102,6 @@
     color: var(--bright-white);
 }
 
-.actions {
-    align-self: flex-end;
-}
-
 .hidden {
     display: none;
 }
