@@ -5,8 +5,10 @@ export default class Settings {
 
     constructor() {
         this.gamemode = localStorage.getItem("gamemode") || "word";
-        this.wordLimit = parseInt(localStorage.getItem("word-limit") || "50");
-        this.timeLimit = parseInt(localStorage.getItem("time-limit") || "15");
+        this.wordLimit =
+            parseInt(localStorage.getItem("word-limit") || "100") || 100;
+        this.timeLimit =
+            parseInt(localStorage.getItem("time-limit") || "60") || 60;
         this.save();
     }
 
@@ -38,7 +40,7 @@ export default class Settings {
 
     private save(): void {
         localStorage.setItem("gamemode", this.gamemode);
-        localStorage.setItem("word-limit", this.wordLimit.toString());
-        localStorage.setItem("time-limit", this.timeLimit.toString());
+        localStorage.setItem("word-limit", Math.abs(this.wordLimit).toString());
+        localStorage.setItem("time-limit", Math.abs(this.timeLimit).toString());
     }
 }
