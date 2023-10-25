@@ -1,179 +1,208 @@
-import Scroller from "./scroller.js";
 import Game, { TimeLimitGame, WordLimitGame } from "./game.js";
+import Scroller from "./scroller.js";
 import Settings from "./settings.js";
 
-const input: any = document.getElementById("word-input");
-const up = document.getElementById("scroll-up");
-const down = document.getElementById("scroll-down");
-const wordsElement = document.getElementById("words");
-const progressElement = document.getElementById("progress");
-const scroll = new Scroller("words");
-const wordsButton = document.getElementById("words-btn");
-const wordLimitDiv = document.getElementById("word-limit");
-const timeButton = document.getElementById("time-btn");
-const timeLimitDiv = document.getElementById("time-limit");
-const settings = new Settings();
+export default class GameView {
+    game: Game;
+    private scroll: Scroller;
+    private settings: Settings;
+    private activeY: number;
+    private input: HTMLInputElement;
+    private wordBox: HTMLElement | null;
+    private chooseWordsButton: HTMLElement | null;
+    private chooseTimeButton: HTMLElement | null;
+    private wordLimits: HTMLElement | null;
+    private timeLimits: HTMLElement | null;
+    private progress: HTMLElement | null;
 
-let game = new Game(new WordLimitGame(15), 15);
-
-let activeY: number =
-    document.querySelector(".word-active")?.getBoundingClientRect().y || 0;
-
-if (wordsElement) wordsElement.innerHTML = game.getHtml();
-
-function handleInput(e: any) {
-    if (!game.isRunning()) {
-        game.startGame();
+    constructor() {
+        this.game = new Game(new WordLimitGame(100), 100);
+        this.initElements();
+        this.initListeners();
+        this.activeY = 0;
+        this.settings = new Settings();
+        this.loadSettings();
+        this.updateUI();
+        this.addEventListeners();
+        this.scroll.top();
     }
-    const val = e.target.value;
-    const correct = val == game.getCurrentWord().value;
-    if (val.endsWith(" ") || (correct && game.isLastWord())) {
-        game.validateWord(val.trim());
-        e.target.value = "";
-        input.value = "";
-        if (game.isGameOver()) {
-            alert(game.getWPM());
+
+    updateUI() {
+        if (this.wordBox) this.wordBox.innerHTML = this.game.getHtml();
+        if (this.progress)
+            this.progress.innerHTML = this.game.getProgressHtml();
+    }
+
+    reset() {
+        this.game.reset();
+        this.resetInput();
+        this.scroll.top();
+        this.activeY = 0;
+        this.updateUI();
+    }
+
+    private initElements() {
+        this.input = document.getElementById("word-input") as HTMLInputElement;
+        this.wordBox = document.getElementById("words");
+        this.chooseWordsButton = document.getElementById("words-btn");
+        this.chooseTimeButton = document.getElementById("time-btn");
+        this.wordLimits = document.getElementById("word-limit");
+        this.timeLimits = document.getElementById("time-limit");
+        this.progress = document.getElementById("progress");
+        this.scroll = new Scroller("words");
+    }
+
+    private loadSettings() {
+        const gamemode = this.settings.getGamemode();
+        if (gamemode === "word") {
+            this.updateWordHtml();
+        } else {
+            this.updateTimeHtml();
+        }
+        this.updateUI();
+    }
+
+    private addEventListeners() {
+        this.input.addEventListener("input", this.handleInput);
+        document.addEventListener("keydown", this.handleReset);
+        this.chooseWordsButton?.addEventListener(
+            "click",
+            this.updateWordHtml.bind(this)
+        );
+        this.chooseTimeButton?.addEventListener(
+            "click",
+            this.updateTimeHtml.bind(this)
+        );
+        this.addWordLimitEventListeners();
+        this.addTimeLimitEventListeners();
+    }
+
+    private addWordLimitEventListeners() {
+        const wordAmounts = document.querySelectorAll(".word-amount");
+        wordAmounts.forEach((amount) => {
+            amount.addEventListener(
+                "click",
+                this.handleWordLimitClick.bind(this)
+            );
+        });
+    }
+
+    private addTimeLimitEventListeners() {
+        const timeAmounts = document.querySelectorAll(".time-amount");
+        timeAmounts.forEach((amount) => {
+            amount.addEventListener(
+                "click",
+                this.handleTimeLimitClick.bind(this)
+            );
+        });
+    }
+
+    private handleWordLimitClick(e: any) {
+        const wordLimit = parseInt(e.target.id.split("-")[1]);
+        this.settings.setWordLimit(wordLimit);
+        this.game = new Game(new WordLimitGame(wordLimit), wordLimit);
+        this.resetInput();
+        this.scroll.top();
+        this.updateWordHtml();
+    }
+
+    private handleReset(e: any) {
+        if (e.key === "Escape") {
+            this.reset();
         }
     }
-    scrollIfNewLine();
-}
 
-function scrollIfNewLine() {
-    const newActiveY =
-        document.querySelector(".word-active")?.getBoundingClientRect().y || 0;
-    if (activeY === 0) activeY = newActiveY;
-    if (newActiveY > activeY) {
-        scroll.down();
-        activeY = newActiveY;
+    private handleTimeLimitClick(e: any) {
+        const timeLimit = parseInt(e.target.id.split("-")[1]);
+        this.settings.setTimeLimit(timeLimit);
+        this.game = new Game(new TimeLimitGame(timeLimit), 100);
+        this.resetInput();
+        this.scroll.top();
+        this.updateTimeHtml();
+    }
+
+    private initListeners() {
+        this.input.addEventListener("input", this.handleInput);
+        document.addEventListener("keydown", this.handleReset);
+        this.chooseWordsButton?.addEventListener(
+            "click",
+            this.handleWordLimitClick
+        );
+        this.chooseTimeButton?.addEventListener(
+            "click",
+            this.handleTimeLimitClick
+        );
+    }
+
+    private handleInput = (e: any) => {
+        if (!this.game.isRunning()) {
+            this.game.startGame();
+        }
+        const val = e.target.value;
+        const correct = val == this.game.getCurrentWord().value;
+        if (val.endsWith(" ") || (correct && this.game.isLastWord())) {
+            this.game.validateWord(val.trim());
+            e.target.value = "";
+            this.input.value = "";
+            if (this.game.isGameOver()) {
+                alert(this.game.getWPM());
+            }
+        }
+
+        this.scrollIfNewLine();
+    };
+    private scrollIfNewLine() {
+        const newActiveY =
+            document.querySelector(".word-active")?.getBoundingClientRect().y ||
+            0;
+        if (this.activeY === 0) this.activeY = newActiveY;
+        if (newActiveY > this.activeY) {
+            this.scroll.down();
+            this.activeY = newActiveY;
+        }
+    }
+
+    private updateTimeHtml() {
+        this.settings.setGamemode("time");
+        this.clearAmountLists();
+        this.chooseTimeButton?.classList.add("active");
+        this.chooseWordsButton?.classList.remove("active");
+        this.wordLimits?.classList.add("hidden");
+        this.timeLimits?.classList.remove("hidden");
+        const timeLimit = this.settings.getTimeLimit();
+        const activeTimeLimit = document.getElementById(`time-${timeLimit}`);
+        activeTimeLimit?.classList.add("active");
+        this.settings.setTimeLimit(timeLimit);
+        this.game = new Game(new TimeLimitGame(timeLimit), 100);
+    }
+
+    private updateWordHtml() {
+        this.settings.setGamemode("word");
+        this.clearAmountLists();
+        this.chooseTimeButton?.classList.remove("active");
+        this.chooseWordsButton?.classList.add("active");
+        this.wordLimits?.classList.remove("hidden");
+        this.timeLimits?.classList.add("hidden");
+        const wordLimit = this.settings.getWordLimit();
+        const activeWordLimit = document.getElementById(`word-${wordLimit}`);
+        activeWordLimit?.classList.add("active");
+        this.settings.setWordLimit(wordLimit);
+        this.game = new Game(new WordLimitGame(wordLimit), wordLimit);
+    }
+
+    private clearAmountLists() {
+        const wordAmounts = document.querySelectorAll(".word-amount");
+        const timeAmounts = document.querySelectorAll(".time-amount");
+        wordAmounts.forEach((amount) => {
+            amount.classList.remove("active");
+        });
+        timeAmounts.forEach((amount) => {
+            amount.classList.remove("active");
+        });
+    }
+
+    private resetInput() {
+        this.input.value = "";
+        this.input.focus();
     }
 }
-
-function handleReset(e: any) {
-    if (e.key === "Escape") {
-        reset();
-    }
-}
-
-function reset() {
-    game.reset();
-    resetInput();
-    scroll.top();
-    activeY = 0;
-    updateUI();
-}
-
-function addEventListeners() {
-    document.addEventListener("keydown", handleReset);
-    up?.addEventListener("click", scroll.up.bind(scroll));
-    down?.addEventListener("click", scroll.down.bind(scroll));
-    input?.addEventListener("input", handleInput);
-    wordsButton?.addEventListener("click", updateWordHtml);
-    timeButton?.addEventListener("click", updateTimeHtml);
-    addWordLimitEventListeners();
-    addTimeLimitEventListeners();
-}
-
-function addWordLimitEventListeners() {
-    const wordAmounts = document.querySelectorAll(".word-amount");
-    wordAmounts.forEach((amount) => {
-        amount.addEventListener("click", handleWordLimitClick);
-    });
-}
-
-function addTimeLimitEventListeners() {
-    const timeAmounts = document.querySelectorAll(".time-amount");
-    timeAmounts.forEach((amount) => {
-        amount.addEventListener("click", handleTimeLimitClick);
-    });
-}
-
-function handleWordLimitClick(e: any) {
-    const wordLimit = parseInt(e.target.id.split("-")[1]);
-    settings.setWordLimit(wordLimit);
-    game = new Game(new WordLimitGame(wordLimit), wordLimit);
-    resetInput();
-    scroll.top();
-    updateWordHtml();
-}
-
-function handleTimeLimitClick(e: any) {
-    const timeLimit = parseInt(e.target.id.split("-")[1]);
-    settings.setTimeLimit(timeLimit);
-    game = new Game(new TimeLimitGame(timeLimit), 100);
-    resetInput();
-    scroll.top();
-    updateTimeHtml();
-}
-
-function updateTimeHtml() {
-    settings.setGamemode("time");
-    clearAmountLists();
-    timeButton?.classList.add("active");
-    wordsButton?.classList.remove("active");
-    wordLimitDiv?.classList.add("hidden");
-    timeLimitDiv?.classList.remove("hidden");
-    const timeLimit = settings.getTimeLimit();
-    const activeTimeLimit = document.getElementById(`time-${timeLimit}`);
-    activeTimeLimit?.classList.add("active");
-    settings.setTimeLimit(timeLimit);
-    game = new Game(new TimeLimitGame(timeLimit), 100);
-}
-
-function updateWordHtml() {
-    settings.setGamemode("word");
-    clearAmountLists();
-    wordsButton?.classList.add("active");
-    timeButton?.classList.remove("active");
-    timeLimitDiv?.classList.add("hidden");
-    wordLimitDiv?.classList.remove("hidden");
-    const wordLimit = settings.getWordLimit();
-    const activeWordLimit = document.getElementById(`word-${wordLimit}`);
-    activeWordLimit?.classList.add("active");
-    settings.setWordLimit(wordLimit);
-    game = new Game(new WordLimitGame(wordLimit), wordLimit);
-}
-
-function clearAmountLists() {
-    const wordAmounts = document.querySelectorAll(".word-amount");
-    const timeAmounts = document.querySelectorAll(".time-amount");
-    wordAmounts.forEach((amount) => {
-        amount.classList.remove("active");
-    });
-    timeAmounts.forEach((amount) => {
-        amount.classList.remove("active");
-    });
-}
-
-function loadSettings() {
-    const gamemode = settings.getGamemode();
-    if (gamemode === "word") {
-        updateWordHtml();
-    } else {
-        updateTimeHtml();
-    }
-    updateUI();
-}
-
-function updateUI() {
-    if (wordsElement) wordsElement.innerHTML = game.getHtml();
-    if (progressElement) progressElement.innerHTML = game.getProgressHtml();
-}
-
-function resetInput() {
-    input.value = "";
-    input.focus();
-}
-
-addEventListeners();
-scroll.top();
-resetInput();
-loadSettings();
-updateUI();
-
-setInterval(() => {
-    if (game.isGameOver()) {
-        alert(game.getWPM());
-        reset();
-    }
-    updateUI();
-}, 50);
