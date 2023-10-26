@@ -15,3 +15,6 @@ fi
 
 # echo pwd into ROOT_DIR variable in .env
 echo "ROOT_DIR=$(pwd)" > .env
+
+# install dependencies
+npm i
