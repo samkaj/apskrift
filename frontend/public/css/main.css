@@ -11,6 +11,7 @@
     --magenta: #e2b5cc;
     --cyan: #c2efff;
     --white: #dddddd;
+    --grey: #5e5e6e;
     --bright-black: #1e1e25;
     --bright-red: #ff8d80;
     --bright-green: #dbffb3;
@@ -18,7 +19,7 @@
     --bright-blue: #7eb6ff;
     --bright-magenta: #e296ff;
     --bright-cyan: #9ce9ff;
-    --bright-white: #dddddd;
+    --bright-white: #cccccc;
     --faint-black: #1211155e;
     --faint-red: #ff9f955e;
     --faint-green: #e2ffc75e;
@@ -84,6 +85,7 @@ footer {
     padding: 0.3em;
 }
 
-.underline {
-    text-decoration: underline;
+.link {
+    color: var(--grey);
+    cursor: pointer;
 }

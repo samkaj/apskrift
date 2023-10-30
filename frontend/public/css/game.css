@@ -67,6 +67,7 @@
 .wrap {
     flex-wrap: wrap;
     gap: 1em;
+    width: 100%;
 }
 
 #word-input {
@@ -110,4 +111,13 @@
 #reset-btn:focus,
 #reset-btn:hover {
     background-color: var(--bright-black);
+}
+
+/* Fill parent width */
+.stats {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0.5em 0;
 }
