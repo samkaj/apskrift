@@ -11,6 +11,7 @@ export default class GameView {
     private wordBox: HTMLElement | null;
     private chooseWordsButton: HTMLElement | null;
     private chooseTimeButton: HTMLElement | null;
+    private resetButton: HTMLElement | null;
     private wordLimits: HTMLElement | null;
     private timeLimits: HTMLElement | null;
     private progress: HTMLElement | null;
@@ -48,6 +49,7 @@ export default class GameView {
         this.wordLimits = document.getElementById("word-limit");
         this.timeLimits = document.getElementById("time-limit");
         this.progress = document.getElementById("progress");
+        this.resetButton = document.getElementById("reset-btn");
         this.scroll = new Scroller("words");
     }
 
@@ -73,6 +75,7 @@ export default class GameView {
             this.switchToTimeLimit.bind(this)
         );
         this.initAmountButtons();
+        this.resetButton?.addEventListener("click", this.reset.bind(this));
     }
 
     private handleReset(e: KeyboardEvent): void {

@@ -105,3 +105,9 @@
 .hidden {
     display: none;
 }
+
+#reset-btn:active,
+#reset-btn:focus,
+#reset-btn:hover {
+    background-color: var(--bright-black);
+}
