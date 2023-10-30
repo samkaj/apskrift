@@ -170,27 +170,26 @@ export default class Game {
 export class TimeLimitGame implements Gamemode {
     private timeLimit: number;
     private timer: Timer;
+    private wordsTyped: number;
 
     constructor(timeLimit: number) {
         this.timeLimit = timeLimit;
         this.timer = new Timer(timeLimit);
+        this.wordsTyped = 0;
     }
 
     startGame(): void {
         this.timer = new Timer(this.timeLimit);
         this.timer.startTimer();
+        this.wordsTyped = 0;
     }
 
     isGameOver(): boolean {
-        if (this.timer.getTime() < 0) {
-            this.timer.stopTimer();
-            return true;
-        }
-        return false;
+        return this.timer.getTime() <= 0
     }
 
     onInput() {
-        // Do nothing
+        this.wordsTyped++;
     }
 
     reset(): void {
@@ -198,11 +197,11 @@ export class TimeLimitGame implements Gamemode {
     }
 
     getProgressHtml(): string {
-        return `${this.timer.getTime()}`;
+        return `${Math.max(this.timer.getTime(), 0)}`;
     }
 
     getGamemodeHtml(): string {
-        return `Time limit ${this.timeLimit} seconds`;
+        return `<span class="label">Words typed</span> ${this.wordsTyped}`;
     }
 }
 
