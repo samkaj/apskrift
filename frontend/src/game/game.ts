@@ -1,14 +1,12 @@
 import generateWords from "./wordgen.js";
 
-/**
- * Game describes different ways of checking if a game is over.
- */
 interface Gamemode {
     isGameOver(): boolean;
     startGame(): void;
     onInput(): void;
     reset(): void;
     getProgressHtml(): string;
+    getGamemodeHtml(): string;
 }
 
 enum WordStatus {
@@ -78,6 +76,13 @@ export default class Game {
         return this.running === RunningStatus.RUNNING;
     }
 
+    isFinished(): boolean {
+        return (
+            this.running === RunningStatus.FINISHED ||
+            this.gamemode.isGameOver()
+        );
+    }
+
     startGame(): void {
         this.startTime = Date.now();
         this.running = RunningStatus.RUNNING;
@@ -127,6 +132,15 @@ export default class Game {
         return Math.round(this.correctWords / minutes);
     }
 
+    getAccuracy(): number {
+        if (this.index === 0) return 0;
+        return Math.round((this.correctWords / this.index) * 100);
+    }
+
+    getTime(): number {
+        return this.endTime - this.startTime;
+    }
+
     getProgressHtml(): string {
         return this.gamemode.getProgressHtml();
     }
@@ -139,6 +153,17 @@ export default class Game {
             }</span>`;
         });
         return html;
+    }
+
+    getStatsHtml(): string {
+        return `
+            <h1>${this.gamemode.getGamemodeHtml()}</h1>
+            <p><span class="label">WPM</span> ${this.getWPM()}
+            <span class="label">Accuracy</span> ${this.getAccuracy()}%
+            <span class="label">Elapsed time</span> ${Math.floor(
+                this.getTime() / 1000
+            )}s</p>
+        `;
     }
 }
 
@@ -157,7 +182,11 @@ export class TimeLimitGame implements Gamemode {
     }
 
     isGameOver(): boolean {
-        return this.timer.getTime() <= 0;
+        if (this.timer.getTime() < 0) {
+            this.timer.stopTimer();
+            return true;
+        }
+        return false;
     }
 
     onInput() {
@@ -170,6 +199,10 @@ export class TimeLimitGame implements Gamemode {
 
     getProgressHtml(): string {
         return `${this.timer.getTime()}`;
+    }
+
+    getGamemodeHtml(): string {
+        return `Time limit ${this.timeLimit} seconds`;
     }
 }
 
@@ -199,6 +232,10 @@ export class WordLimitGame implements Gamemode {
 
     getProgressHtml(): string {
         return `${this.wordsTyped} / ${this.wordLimit}`;
+    }
+
+    getGamemodeHtml(): string {
+        return `${this.wordLimit} words`;
     }
 }
 

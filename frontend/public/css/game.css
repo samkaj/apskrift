@@ -9,8 +9,7 @@
     justify-content: center;
 }
 
-#game,
-#game * {
+#game {
     border-radius: 5px;
 }
 
@@ -89,6 +88,7 @@
 .word-active {
     background-color: var(--faint-blue);
     color: var(--blue);
+    border-radius: 5px;
 }
 
 .word-correct {
@@ -107,17 +107,43 @@
     display: none;
 }
 
+.hidden * {
+    display: none;
+}
+
 #reset-btn:active,
 #reset-btn:focus,
 #reset-btn:hover {
     background-color: var(--bright-black);
 }
 
-/* Fill parent width */
-.stats {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+#stats {
+    display: block;
+    margin: auto;
     width: 100%;
+    font-size: xx-large;
+    height: 100%;
+}
+
+#stats > h1 {
+    font-size: xx-large;
+    padding-bottom: 0.5em;
+    text-align: center;
+    font-weight: 300;
+}
+
+#stats > p {
     margin: 0.5em 0;
+    font-size: xx-large;
+    text-align: center;
+}
+
+.label {
+    margin: 0;
+    font-weight: 500;
+    font-size: x-large;
+    color: var(--grey);
+    border-radius: 0;
+    border-left: 2px solid var(--bright-black);
+    padding-left: 1em;
 }

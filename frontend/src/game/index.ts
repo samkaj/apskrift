@@ -5,11 +5,10 @@ function main() {
 
     setInterval(() => {
         if (gameView.game.isGameOver()) {
-            alert(gameView.game.getWPM());
-            gameView.reset();
+            return;
         }
         gameView.updateUI();
-    }, 50);
+    }, 1000 / 60);
 }
 
 main();

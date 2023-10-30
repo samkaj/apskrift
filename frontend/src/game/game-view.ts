@@ -9,6 +9,7 @@ export default class GameView {
     private activeY: number;
     private input: HTMLInputElement;
     private wordBox: HTMLElement | null;
+    private stats: HTMLElement | null;
     private chooseWordsButton: HTMLElement | null;
     private chooseTimeButton: HTMLElement | null;
     private resetButton: HTMLElement | null;
@@ -28,22 +29,49 @@ export default class GameView {
     }
 
     updateUI(): void {
-        if (this.wordBox) this.wordBox.innerHTML = this.game.getHtml();
         if (this.progress)
             this.progress.innerHTML = this.game.getProgressHtml();
+        if (!this.game.isFinished()) {
+            this.renderWords();
+            return;
+        }
+        this.renderStats();
     }
 
     reset(): void {
         this.game.reset();
-        this.resetInput();
         this.scroll.top();
         this.activeY = 0;
         this.updateUI();
+        this.resetInput();
+    }
+
+    private renderWords(): void {
+        if (this.wordBox) this.wordBox.innerHTML = this.game.getHtml();
+        this.stats?.classList.add("hidden");
+        this.wordBox?.classList.remove("hidden");
+        this.showInput();
+    }
+
+    private renderStats(): void {
+        if (this.stats) this.stats.innerHTML = this.game.getStatsHtml();
+        this.wordBox?.classList.add("hidden");
+        this.stats?.classList.remove("hidden");
+        this.hideInput();
+    }
+
+    private hideInput(): void {
+        this.input.classList.add("hidden");
+    }
+
+    private showInput(): void {
+        this.input.classList.remove("hidden");
     }
 
     private initElements(): void {
         this.input = document.getElementById("word-input") as HTMLInputElement;
         this.wordBox = document.getElementById("words");
+        this.stats = document.getElementById("stats");
         this.chooseWordsButton = document.getElementById("words-btn");
         this.chooseTimeButton = document.getElementById("time-btn");
         this.wordLimits = document.getElementById("word-limit");
