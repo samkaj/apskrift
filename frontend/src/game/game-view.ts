@@ -153,7 +153,7 @@ export default class GameView {
 
     private handleInput(e: Event): void {
         const target = e.target as HTMLInputElement;
-        if (!this.game.isRunning()) {
+        if (this.game.isFirstWord()) {
             this.game.startGame();
         }
         const val = target.value;

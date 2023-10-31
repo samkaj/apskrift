@@ -79,6 +79,10 @@ export default class Game {
         return gameOver;
     }
 
+    isFirstWord(): boolean {
+        return this.index === 0;
+    }
+
     isRunning(): boolean {
         return this.running === RunningStatus.RUNNING;
     }
