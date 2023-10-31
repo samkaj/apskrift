@@ -51,6 +51,13 @@ export default class Game {
         });
     }
 
+    addRandomWord(): void {
+        this.words.push({
+            value: generateWords(1)[0],
+            wordStatus: WordStatus.INACTIVE,
+        });
+    }
+
     reset(): void {
         this.words = this.createWords(this.amount);
         this.words[0].wordStatus = WordStatus.ACTIVE;
@@ -103,6 +110,12 @@ export default class Game {
         this.index++;
         if (this.index < this.words.length)
             this.words[this.index].wordStatus = WordStatus.ACTIVE;
+        if (
+            this.gamemode instanceof TimeLimitGame &&
+            this.index >= Math.floor(this.words.length - 1) / 2
+        ) {
+            this.addRandomWord();
+        }
     }
 
     getCurrentWord(): Word {
@@ -185,7 +198,7 @@ export class TimeLimitGame implements Gamemode {
     }
 
     isGameOver(): boolean {
-        return this.timer.getTime() <= 0
+        return this.timer.getTime() <= 0;
     }
 
     onInput() {
