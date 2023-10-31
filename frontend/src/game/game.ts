@@ -1,4 +1,5 @@
 import generateWords from "./wordgen.js";
+import TimeLimitGame from "./gamemodes/time.js";
 
 interface Gamemode {
     isGameOver(): boolean;
@@ -28,7 +29,7 @@ type Word = {
 };
 
 export default class Game {
-    running: RunningStatus = RunningStatus.STOPPED;
+    private running: RunningStatus = RunningStatus.STOPPED;
     private gamemode: Gamemode;
     private words: Word[];
     private index: number = 0;
@@ -83,10 +84,6 @@ export default class Game {
         return this.index === 0;
     }
 
-    isRunning(): boolean {
-        return this.running === RunningStatus.RUNNING;
-    }
-
     isFinished(): boolean {
         return (
             this.running === RunningStatus.FINISHED ||
@@ -130,34 +127,6 @@ export default class Game {
         return this.index === this.words.length - 1;
     }
 
-    getWordClass(word: Word): string {
-        switch (word.wordStatus) {
-            case WordStatus.ACTIVE:
-                return "word-active";
-            case WordStatus.INACTIVE:
-                return "word-inactive";
-            case WordStatus.CORRECT:
-                return "word-correct";
-            case WordStatus.INCORRECT:
-                return "word-incorrect";
-        }
-    }
-
-    getWPM(): number {
-        const time = this.endTime - this.startTime;
-        const minutes = time / 1000 / 60;
-        return Math.round(this.correctWords / minutes);
-    }
-
-    getAccuracy(): number {
-        if (this.index === 0) return 0;
-        return Math.round((this.correctWords / this.index) * 100);
-    }
-
-    getTime(): number {
-        return this.endTime - this.startTime;
-    }
-
     getProgressHtml(): string {
         return this.gamemode.getProgressHtml();
     }
@@ -182,101 +151,32 @@ export default class Game {
             )}s</p>
         `;
     }
-}
 
-export class TimeLimitGame implements Gamemode {
-    private timeLimit: number;
-    private timer: Timer;
-    private wordsTyped: number;
-
-    constructor(timeLimit: number) {
-        this.timeLimit = timeLimit;
-        this.timer = new Timer(timeLimit);
-        this.wordsTyped = 0;
+    private getWordClass(word: Word): string {
+        switch (word.wordStatus) {
+            case WordStatus.ACTIVE:
+                return "word-active";
+            case WordStatus.INACTIVE:
+                return "word-inactive";
+            case WordStatus.CORRECT:
+                return "word-correct";
+            case WordStatus.INCORRECT:
+                return "word-incorrect";
+        }
     }
 
-    startGame(): void {
-        this.timer = new Timer(this.timeLimit);
-        this.timer.startTimer();
-        this.wordsTyped = 0;
+    private getWPM(): number {
+        const time = this.endTime - this.startTime;
+        const minutes = time / 1000 / 60;
+        return Math.round(this.correctWords / minutes);
     }
 
-    isGameOver(): boolean {
-        return this.timer.getTime() <= 0;
+    private getAccuracy(): number {
+        if (this.index === 0) return 0;
+        return Math.round((this.correctWords / this.index) * 100);
     }
 
-    onInput() {
-        this.wordsTyped++;
-    }
-
-    reset(): void {
-        this.timer.stopTimer();
-    }
-
-    getProgressHtml(): string {
-        return `${Math.max(this.timer.getTime(), 0)}`;
-    }
-
-    getGamemodeHtml(): string {
-        return `<span class="label">Words typed</span> ${this.wordsTyped}`;
-    }
-}
-
-export class WordLimitGame implements Gamemode {
-    private wordLimit: number;
-    private wordsTyped: number = 0;
-
-    constructor(wordLimit: number) {
-        this.wordLimit = wordLimit;
-    }
-
-    startGame(): void {
-        this.wordsTyped = 0;
-    }
-
-    isGameOver(): boolean {
-        return this.wordLimit <= this.wordsTyped;
-    }
-
-    onInput() {
-        this.wordsTyped++;
-    }
-
-    reset(): void {
-        this.wordsTyped = 0;
-    }
-
-    getProgressHtml(): string {
-        return `${this.wordsTyped} / ${this.wordLimit}`;
-    }
-
-    getGamemodeHtml(): string {
-        return `${this.wordLimit} words`;
-    }
-}
-
-class Timer {
-    private countdown: number;
-    private timer: number;
-    private interval: number;
-
-    constructor(countdown: number) {
-        this.countdown = countdown;
-        this.timer = countdown;
-    }
-
-    getTime(): number {
-        return this.countdown;
-    }
-
-    stopTimer(): void {
-        window.clearInterval(this.interval);
-        this.countdown = this.timer;
-    }
-
-    startTimer(): void {
-        this.interval = window.setInterval(() => {
-            this.countdown--;
-        }, 1000);
+    private getTime(): number {
+        return this.endTime - this.startTime;
     }
 }

@@ -1,4 +1,6 @@
-import Game, { TimeLimitGame, WordLimitGame } from "./game.js";
+import Game from "./game.js";
+import TimeLimitGame from "./gamemodes/time.js";
+import WordLimitGame from "./gamemodes/words.js";
 import Scroller from "./scroller.js";
 import Settings from "./settings.js";
 
@@ -50,22 +52,14 @@ export default class GameView {
         if (this.wordBox) this.wordBox.innerHTML = this.game.getHtml();
         this.stats?.classList.add("hidden");
         this.wordBox?.classList.remove("hidden");
-        this.showInput();
+        this.input.classList.remove("hidden");
     }
 
     private renderStats(): void {
         if (this.stats) this.stats.innerHTML = this.game.getStatsHtml();
         this.wordBox?.classList.add("hidden");
         this.stats?.classList.remove("hidden");
-        this.hideInput();
-    }
-
-    private hideInput(): void {
         this.input.classList.add("hidden");
-    }
-
-    private showInput(): void {
-        this.input.classList.remove("hidden");
     }
 
     private initElements(): void {
@@ -88,7 +82,6 @@ export default class GameView {
         } else {
             this.updateTimeHtml();
         }
-        this.updateUI();
     }
 
     private addEventListeners(): void {
