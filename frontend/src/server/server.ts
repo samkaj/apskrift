@@ -37,8 +37,8 @@ export default class HttpServer {
         req: http.IncomingMessage,
         res: http.ServerResponse
     ) {
-        if (req.url === "/favicon.ico") {
-            this.handleFaviconRequest(res);
+        if (req.url?.endsWith(".ico") || req.url?.endsWith(".png")) {
+            this.handleFaviconRequest(req, res);
             return;
         }
 
@@ -65,13 +65,15 @@ export default class HttpServer {
         fs.createReadStream(this.getHtml("/404")).pipe(res);
     }
 
-    private handleFaviconRequest(res: http.ServerResponse) {
-        const readStream = fs.createReadStream(this.getPath("/favicon.ico"));
+    private handleFaviconRequest(
+        req: http.IncomingMessage,
+        res: http.ServerResponse) {
+        const readStream = fs.createReadStream(this.getPath(req.url));
         readStream.on("error", () => {
             this.handle404(res);
         });
-        readStream.on("end", () => {
-            res.writeHead(200, { "Content-Type": "image/x-icon" });
+        readStream.on("ready", () => {
+            res.writeHead(200, { "Content-Type": "image/png" });
             readStream.pipe(res);
         });
     }
