@@ -124,6 +124,10 @@ export default class GameView {
     private initAmountButtons(): void {
         const wordAmounts = document.querySelectorAll(".word-amount");
         const timeAmounts = document.querySelectorAll(".time-amount");
+        if (this.isMobile()) {
+            wordAmounts[wordAmounts.length - 1].remove();
+            timeAmounts[timeAmounts.length - 1].remove();
+        }
         wordAmounts.forEach((amount) => {
             amount.addEventListener("click", this.handleWordAmount.bind(this));
         });
