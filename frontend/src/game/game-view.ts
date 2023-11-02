@@ -73,6 +73,10 @@ export default class GameView {
         this.progress = document.getElementById("progress");
         this.resetButton = document.getElementById("reset-btn");
         this.scroll = new Scroller("words");
+
+        if (this.isMobile()) {
+            if (this.resetButton) this.resetButton.innerHTML = "restart";
+        }
     }
 
     private loadSettings(): void {
@@ -207,6 +211,10 @@ export default class GameView {
         timeAmounts.forEach((amount) => {
             amount.classList.remove("active");
         });
+    }
+
+    private isMobile(): boolean {
+        return window.innerWidth < 768;
     }
 
     private resetInput(): void {
