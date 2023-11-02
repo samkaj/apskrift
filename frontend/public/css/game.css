@@ -98,11 +98,11 @@
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .hidden * {
-    display: none;
+    display: none !important;
 }
 
 #reset-btn:active,
@@ -148,23 +148,20 @@ h1 > .label {
     font-size: x-large;
 }
 
-@media (max-width: 799px) {
+@media only screen and (max-width: 799px) {
     #game {
         width: 100%;
         min-width: 0;
     }
 
-    .settings,
-    #word-input,
-    #stats {
-        width: calc(100% - 40px);
-    }
-
     .settings {
-        flex-direction: row;
-        align-items: center;
         position: fixed;
         top: 0;
+        width: calc(100% - 2.4em);
+    }
+
+    #words {
+        max-height: calc(4em * 1.2);
     }
 
     .settings > *,
