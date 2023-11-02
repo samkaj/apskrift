@@ -3,9 +3,13 @@
     margin: auto;
     width: 800px;
     height: calc(100vh - 2em);
+    min-width: 800px;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+}
+
+#game {
     border-radius: 5px;
 }
 
@@ -26,13 +30,14 @@
 }
 
 .settings {
-    display: flex;
+    display: flexbox;
     justify-content: space-between;
     padding: 10px;
     border-radius: 5px;
     background-color: var(--black);
-    border: 1px solid var(--bright-black);
+    border: solid 1px var(--bright-black);
     width: 100%;
+    align-self: flex-start;
 }
 
 .settings * {
@@ -46,10 +51,14 @@
 
 #gamemode {
     border-right: 1px solid var(--bright-black);
+    border-radius: 0;
+    padding-right: 1em;
 }
 
 #count {
     border-left: 1px solid var(--bright-black);
+    border-radius: 0;
+    padding-left: 1em;
 }
 
 .wrap {
@@ -61,12 +70,13 @@
 #word-input {
     margin: auto;
     padding: 0.5em 1em;
-    border: 1px solid var(--bright-black);
+    border: none;
+    width: 100%;
+    outline: none;
+    background-color: var(--black);
+    border: solid 1px var(--bright-black);
     border-radius: 5px;
     font-size: large;
-    width: 100%;
-    background-color: var(--black);
-    outline: none;
 }
 
 .word-active {
@@ -88,6 +98,10 @@
 }
 
 .hidden {
+    display: none;
+}
+
+.hidden * {
     display: none;
 }
 
@@ -123,6 +137,7 @@
     font-weight: 500;
     font-size: x-large;
     color: var(--grey);
+    border-radius: 0;
     border-left: 2px solid var(--bright-black);
     padding-left: 0.8em;
 }
