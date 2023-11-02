@@ -25,7 +25,7 @@ export default class WordLimitGame implements Gamemode {
     }
 
     getProgressHtml(): string {
-        return `${this.wordsTyped} / ${this.wordLimit}`;
+        return `${this.wordLimit - this.wordsTyped}`;
     }
 
     getGamemodeHtml(): string {
