@@ -6,9 +6,9 @@ export default class Settings {
     constructor() {
         this.gamemode = localStorage.getItem("gamemode") || "word";
         this.wordLimit =
-            parseInt(localStorage.getItem("word-limit") || "100") || 100;
+            parseInt(localStorage.getItem("word-limit") || "50") || 50;
         this.timeLimit =
-            parseInt(localStorage.getItem("time-limit") || "60") || 60;
+            parseInt(localStorage.getItem("time-limit") || "30") || 30;
         this.save();
     }
 

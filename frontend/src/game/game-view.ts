@@ -76,6 +76,8 @@ export default class GameView {
 
         if (this.isMobile()) {
             if (this.resetButton) this.resetButton.innerHTML = "restart";
+        } else {
+            this.input?.focus();
         }
     }
 
