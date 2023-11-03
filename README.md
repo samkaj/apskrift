@@ -4,16 +4,16 @@ Apskrift is a typing practice tool. Choose a gamemode and write as quickly as po
 
 ## Features
 
-- [ ] Word limit
-- [ ] Time limit
+- [x] Word limit
+- [x] Time limit
 - [ ] Custom inputs
 - [ ] Multiplayer (typeracer inspired)
 
 ## Project structure
 
-Apskrift is separated into two directories, [`frontend`](./frontend) and [`backend`](./backend).
+Apskrift will be separated into two directories, [`frontend`](./frontend) and `backend`.
 
-The backend handles accounts and stats, the frontend contains the website and game.
+The backend will handle multiplayer, accounts and stats, the frontend contains the website and game.
 
 ## Dependency philosophy
 
