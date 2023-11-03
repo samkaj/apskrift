@@ -149,21 +149,20 @@ h1 > .label {
 }
 
 @media only screen and (max-width: 799px) {
+    .wrap {
+        display: flex;
+        flex-direction: row;
+        align-content: space-between;
+        flex-basis: 100%;
+    }
+
     #game {
+        margin: auto;
         width: 100%;
         min-width: 0;
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
-        align-content: center;
-        align-items: center;
-        height: 90vh;
-    }
-
-    .settings {
-        position: fixed;
-        top: 0;
-        width: calc(100% - 3.8em);
+        height: 100%;
     }
 
     #words {
@@ -194,7 +193,6 @@ h1 > .label {
         position: fixed;
         bottom: 0;
         margin-bottom: 0.5em;
-        width: calc(100% - 2.4em);
     }
 
     footer > p {

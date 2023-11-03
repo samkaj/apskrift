@@ -89,4 +89,5 @@ footer {
 .link {
     color: var(--grey);
     cursor: pointer;
+    font-size: medium;
 }
