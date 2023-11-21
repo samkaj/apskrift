@@ -37,6 +37,12 @@ export default class Game {
     private startTime: number;
     private endTime: number = 0;
     private correctWords: number = 0;
+    private wordClassMap = {
+        [WordStatus.ACTIVE]: "word-active",
+        [WordStatus.INACTIVE]: "word-inactive",
+        [WordStatus.CORRECT]: "word-correct",
+        [WordStatus.INCORRECT]: "word-incorrect",
+    };
 
     constructor(gamemode: Gamemode, amount: number = 60) {
         this.gamemode = gamemode;
@@ -132,13 +138,14 @@ export default class Game {
     }
 
     getHtml(): string {
-        var html = "";
-        this.words.forEach((word) => {
-            html += `<span class="word ${this.getWordClass(word)}">${
-                word.value
-            }</span>`;
-        });
-        return html;
+        return this.words
+            .map(
+                (word) =>
+                    `<span class="word ${this.getWordClass(word)}">${
+                        word.value
+                    }</span>`
+            )
+            .join("");
     }
 
     getStatsHtml(): string {
@@ -153,16 +160,7 @@ export default class Game {
     }
 
     private getWordClass(word: Word): string {
-        switch (word.wordStatus) {
-            case WordStatus.ACTIVE:
-                return "word-active";
-            case WordStatus.INACTIVE:
-                return "word-inactive";
-            case WordStatus.CORRECT:
-                return "word-correct";
-            case WordStatus.INCORRECT:
-                return "word-incorrect";
-        }
+        return this.wordClassMap[word.wordStatus];
     }
 
     private getWPM(): number {
